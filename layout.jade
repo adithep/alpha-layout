@@ -1,0 +1,34 @@
+head
+  meta(charset="UTF-8")
+  meta(name="viewport", content="width=device-width, initial-scale=1.0")
+  meta(name='mobile-web-app-capable', content='yes')
+  meta(name='apple-mobile-web-app-capable', content='yes')
+  meta(name='apple-mobile-web-app-status-bar-style', content='black')
+  title αSΨS
+
+body
+  if currentUser.username
+    +layout
+  else
+    +authentication
+
+template(name="layout")
+  nav(class="nav_large")
+    a(href="/")
+      h1 αSΨS
+    ul
+      li
+        a(href="/form") Insert
+      li
+        a Display
+    ul(class="right user")
+      li
+        a #{currentUser.username}
+      li
+        a(href="#", class="logout") `
+  div(id="content")
+    +_t_path
+
+template(name="sorry_man")
+  h1 Nothing found on this address... Ahghhhhhhh What to do, what to do?
+  p I am so afraid...
