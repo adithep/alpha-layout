@@ -8,11 +8,13 @@ Package.on_use(function (api, where, asset) {
     'core-lib',
     'utilities',
     'alpha-auth',
-    'stylus',
+    'accounts-base',
+    'alpha-stylus',
     'standard-app-packages']);
   api.add_files([
     'layout.html',
     'layout.coffee',
+    'layout.styl',
     'essential.styl'], 'client');
 });
 
