@@ -25,13 +25,12 @@ UI.registerHelper "make_href", ->
     return "/#{str}#{@href}"
   return false
 
+UI.registerHelper "t_spa", ->
+  console.log @_id
+  return LDATA.find(_sid: @_id, _s_n: "_gr")
 Template._t_group.helpers
   t_gr: ->
     return LDATA.find(_gid: @_id, _s_n: "doc")
-
-Template._t_space.helpers
-  t_spa: ->
-    return LDATA.find(_sid: @_id, _s_n: "_gr")
 
 Template._t_path.helpers
   path: ->
@@ -42,14 +41,15 @@ Template._t_path.helpers
     return {_id: id}
 
   t_yield: ->
-    console.log @
-    return LDATA.find(_pid: @_id, _s_n: "_spa")
+    return LDATA.find({_pid: @_id, _s_n: "_spa"}, {sort: {sort: 1}})
   _sel_spa: ->
     if @_spa_tem and Template[@_spa_tem]
       return Template[@_spa_tem]
     return Template._t_space
+Template.sub_path.helpers
   t_sub: ->
-    id = Session.get("#{@_id}_path")
+    parent = UI._parentData(1)
+    id = Session.get("#{parent._id}_path")
     return LDATA.find(_id: id, _s_n: "path")
 
 Template._parent_t.helpers
@@ -61,7 +61,7 @@ Template._parent_t.helpers
         when '_btn_list'
           return Template.button_list
         when '_btn'
-          return Template._schema_buttons
+          return Template.li_btn
         when 'input'
           return Template._each_input
     else

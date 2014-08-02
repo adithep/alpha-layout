@@ -20,10 +20,14 @@
     {{#each t_yield}}
       {{>_sel_spa}}
     {{/each}}
-    {{#each t_sub}}
-      {{>_t_path}}
-    {{/each}}
   {{/with}}
+</template>
+
+<template name="sub_path">
+  <h3>sub</h3>
+  {{#each t_sub}}
+    {{>_t_path}}
+  {{/each}}
 </template>
 
 <template name="_t_space">
@@ -46,18 +50,35 @@
   {{/each}}
 </template>
 
+<template name="footer">
+  <h3>foot</h3>
+</template>
+
+<template name="main_intro">
+  <h3>Intro</h3>
+</template>
+
+<template name="_btn">
+  <a {{_btn_dyn}} class="{{_btn_attrs.class}} {{_btn_class}}">
+    {{this.key_dis}}
+  </a>
+</template>
+
+<template name="li_btn">
+  <li>
+    <a href="/{{this._tri_dis.href}}">{{this._tri_dis.dis}}</a>
+  </li>
+</template>
+
 <template name="main_nav">
   <nav class="nav_large">
     <a href="/">
       <h1>αSΨS</h1>
     </a>
     <ul>
-      <li>
-        <a href="/forms">Insert</a>
-      </li>
-      <li>
-        <a href="/">Display</a>
-      </li>
+      {{#each t_spa}}
+        {{>_t_group}}
+      {{/each}}
     </ul>
     <ul class="right user">
       <li>
