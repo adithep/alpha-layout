@@ -1,27 +1,107 @@
 @import 'alpmixins'
 @import 'jeet'
 
-#content
+.nav_large.mara
+  display: inline-block
+  width 100%
+  position relative
+  padding 35px 0 0
   text-align center
+  background-image url('http://localhost:8080/static/bg/bg-header.png')
+  z-index 999
 
-.right
-  float right
+.nav_large.mara:after
 
-.left
+  position: absolute
+  left: 0
+  bottom: -9px
+  width: 100%
+  height: 9px
+  background-image: url('http://localhost:8080/static/bg/header-bottom-arrow.png');
+  background-position: 0 0
+  background-repeat: repeat-x
+  content: ""
+  z-index -1
+
+.nav_large.mara .container
+  width 960px
+  margin 0 auto
+  padding 0
+  position relative
+
+.nav_title.mara
+  margin-left 35px
+  &:hover
+    cursor pointer
+    cursor hand
+
+.nav_title.mara .title_h
+  display: block
   float left
+  margin: 0
+  color: #e5e1d8
+  font-size: 54px
+  font-family: 'Over the Rainbow', cursive
+  text-shadow: -1px -1px 0 #1d1d1d
 
-.nav_large
+.nav_btn_list.mara
+  position: relative
+  clear both
+  top 30px
+  width 500px
+  margin: 0 -10px 0
+  padding: 0 10px
+  border-width: 1px
+  border-style: solid
+  border-color: #343131
+  background: #f7f5ed
+  background: -moz-linear-gradient(top,  #f7f5ed 0%, #ebe9e2 100%)
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f7f5ed), color-stop(100%,#ebe9e2))
+  background: -webkit-linear-gradient(top,  #f7f5ed 0%,#ebe9e2 100%)
+  background: -o-linear-gradient(top,  #f7f5ed 0%,#ebe9e2 100%)
+  background: -ms-linear-gradient(top,  #f7f5ed 0%,#ebe9e2 100%)
+  border-radius(5px)
+  box-shadow(0 0 3px rgba(0,0,0,.05))
+  zoom: 1
+
+.nav_btn_list.mara ._btn
+  position: relative
+  display: inline-block
+  padding: 18px 22px
+  text-align: center
+  color: #36332e
+  font-weight: 600
+  font-size: 14px
+  font-family: 'Open Sans', Arial
+  text-transform: uppercase
+  &:hover
+    cursor pointer
+    cursor hand
+    color blue
+
+.footer.mara
+  position: absolute
+  bottom 0
+  display: inline-block
+
+
+
+
+
+
+.nav_large.muru
+  margin-top 35px
   center(max_width = 1410px)
   overflow hidden
-  background $red
+  background $brown
   margin-bottom 15px
   border-radius(5px)
   box-shadow(2px 2px 3px rgba(0,0,0,.3))
 
-.nav_large>a
-  text-decoration none
+.nav_title.muru
+  float left
 
-.nav_large h1
+.nav_title.muru .title_h
   float left
   margin-left 25px
   margin-right 25px
@@ -33,66 +113,28 @@
     display block
     text-align center
     float center
-
-
-.nav_large ul
-  display inline-block
-  margin 0
-  padding 0
+.nav_btn_list.muru
   float left
-  background $brown
+  margin-left 50px
+  text-align center
   color $text-white
-  list-style-type: none
-  &.right
-    float right
   @media screen and (max-width: 600px)
     display none
     width 100%
     text-align center
     padding 15px
 
-.nav_large li
-  box-sizing()
-  float left
-  display block
-  text-align center
-  transition(background .3s)
-  border-left 1px solid $black
-  &:last-child
-    border-right 1px solid $black
-
-
-.nav_large li a
+.nav_btn_list.muru ._btn
   font-size 20px
+  background $red
   color $text-white
   text-decoration none
   padding 33px 10px
   display inline-block
   font-weight 200
+  box-sizing()
+  transition(background .3s)
 
-.nav_large li:hover
-  background $black
-
-
-.nav_large .right li:last-child
-  max-height 70px
-  background $yellow
-  display none
-  border-right none
-
-.nav_large .right li:last-child.show
-  display inline-block
-
-.nav_large .right li:last-child a
-  display block
-  font-size 25px
-  font-family "liga"
-  padding 30px 10px
-  background $yellow
-  text-decoration none
-  color $text-black
-  transition(all .3s)
-
-.nav_large div a:hover
+.nav_btn_list.muru ._btn:hover
   background $brown
   color $text-white

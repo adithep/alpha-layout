@@ -4,21 +4,20 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <title>αSΨS</title>
 </head>
 
 <body>
-  {{#if currentUser.username}}
-    {{>_t_path}}
-  {{else}}
-    {{>authentication}}
-  {{/if}}
+  {{>_t_path}}
 </body>
 
 <template name="_t_path">
-  {{#each t_yield}}
-    {{>_sel_spa}}
-  {{/each}}
+  {{#with path}}
+    {{#each t_yield}}
+      {{#with ex_ctl}}
+        {{>_sel_spa}}
+      {{/with}}
+    {{/each}}
+  {{/with}}
 </template>
 
 <template name="sub_path">
@@ -28,39 +27,17 @@
   {{/each}}
 </template>
 
-<template name="_t_space">
-  {{#each t_spa}}
-    {{>_t_group}}
-  {{/each}}
-</template>
-
-<template name="_t_group">
-  <div class="parent_div">
-    {{#each t_gr}}
-      {{>_parent_t}}
-    {{/each}}
-  </div>
-</template>
-
-<template name="_parent_t">
-  {{#each t_data}}
-    {{> t_tem}}
-  {{/each}}
-</template>
-
-<template name="footer">
-  <h3>foot</h3>
-</template>
-
 <template name="main_intro">
   <h3>Intro</h3>
 </template>
 
 <template name="_btn">
-  <a {{_btn_dyn}} class="{{_btn_attrs.class}} {{_btn_class}}">
-    {{this.key_dis}}
+  <a {{_btn_dyn}} class="_btn {{_btn_class}}" href="{{fhref}}">
+    {{dis_el}}
   </a>
 </template>
+
+
 
 <template name="li_btn">
   <li>
@@ -68,26 +45,104 @@
   </li>
 </template>
 
-<template name="main_nav">
-  <nav class="nav_large">
-    <a href="/">
-      <h1>αSΨS</h1>
-    </a>
-    <ul>
-      {{#each t_spa}}
-        {{>_t_group}}
-      {{/each}}
-    </ul>
-    <ul class="right user">
-      <li>
-        <a>{{currentUser.username}}</a>
-      </li>
-      <li>
-        <a class="logout">`</a>
-      </li>
-    </ul>
-  </nav>
-  <div id="content">
-    {{>_t_path}}
+<template name="h1_title">
+  <a href="{{fhref}}">
+    <h1 class="title_h">{{dis_el}}</h1>
+  </a>
+</template>
+
+<template name="nav_title">
+  <div class="nav_title {{ctl_look}}">
+    {{>awesome}}
   </div>
+</template>
+
+<template name="nav_btn_list">
+  <div class="nav_btn_list {{ctl_look}}">
+    {{>awesome}}
+  </div>
+</template>
+
+<template name="user_n">
+  <a>{{dis_el}}</a>
+</template>
+
+<template name="def_sub_tem">
+  {{dis_el}}
+</template>
+
+<template name="nav_user">
+  <ul class="right user">
+    <li>
+      {{>awesome}}
+    </li>
+    <li>
+      <a class="logout">`</a>
+    </li>
+  </ul>
+</template>
+
+<template name="main_nav">
+  <nav class="nav_large {{ctl_look}}">
+    <div class="container">
+      {{>awesome}}
+    </div>
+  </nav>
+</template>
+
+<template name="footer">
+  <div class="footer {{ctl_look}}">
+    {{>awesome}}
+  </div>
+</template>
+
+<template name="footer_about">
+  <div class="footer_about {{ctl_look}}">
+    {{>awesome}}
+  </div>
+</template>
+
+<template name="info">
+  <a {{_btn_dyn}} class="profile_e {{_btn_class}}" href="{{fhref}}">
+    {{dis_el}}
+  </a>
+</template>
+
+<template name="input">
+  <div class="input {{ctl_look}}">
+    {{>awesome}}
+  </div>
+</template>
+
+<template name="input_el">
+  <input placeholder="meme">
+</template>
+
+<template name="data_tem">
+  {{#each ctla}}
+    {{#with dat_dat}}
+      {{#each disp_arr}}
+        {{>dat_tem_cal}}
+      {{/each}}
+    {{/with}}
+  {{/each}}
+</template>
+
+<template name="each_disp">
+  {{#each disp_arr}}
+    {{disp}}
+  {{/each}}
+</template>
+
+<template name="ctl_tem">
+  {{#each ctl}}
+    {{#with ex_ctl}}
+      {{>tem_cal}}
+    {{/with}}
+  {{/each}}
+</template>
+
+<template name="awesome">
+  {{>ctl_tem}}
+  {{>data_tem}}
 </template>
