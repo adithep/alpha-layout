@@ -16,11 +16,9 @@
 </body>
 
 <template name="_t_path">
-  {{#with path}}
-    {{#each t_yield}}
-      {{>_sel_spa}}
-    {{/each}}
-  {{/with}}
+  {{#each t_yield}}
+    {{>_sel_spa}}
+  {{/each}}
 </template>
 
 <template name="sub_path">
