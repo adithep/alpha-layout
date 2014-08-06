@@ -39,15 +39,16 @@ UI.registerHelper "ctl_look", ->
       return tem.look_n
 
 UI.registerHelper "fhref", ->
-  parent = UI._parentData(2)
-  if parent.data_href and @[parent.data_href]
-    if @[parent.data_href] is "blank"
+  parent = UI._parentData(3)
+  me = UI._parentData(1)
+  if parent.data_href and me[parent.data_href]
+    if me[parent.data_href] is "blank"
       return "/"
     else
-      return "/#{@[parent.data_href]}"
-  else if parent.data_sub_href and @[parent.data_sub_href]
+      return "/#{me[parent.data_href]}"
+  else if parent.data_sub_href and me[parent.data_sub_href]
     cur = Session.get("current_path")
-    return "/#{cur}/#{@[parent.data_sub_href]}"
+    return "/#{cur}/#{me[parent.data_sub_href]}"
 
 UI.registerHelper "disp_arr", ->
   parent = UI._parentData(2)
