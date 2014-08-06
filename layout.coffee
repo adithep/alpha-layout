@@ -1,3 +1,20 @@
+the_func = ->
+  view = this
+  return HTML.A HTML.Attrs(
+    class: ->
+      [
+        "_btn "
+        Spacebars.mustache(view.lookup("_btn_class"))
+      ]
+    href: ->
+      Spacebars.mustache view.lookup("fhref")
+  , ->
+    Spacebars.attrMustache view.lookup("_btn_dyn")
+  ), "\n    ", Blaze.View(->
+    Spacebars.mustache view.lookup("dis_el")
+  ), "\n  "
+
+
 Template.main_nav.events
   'mouseenter .user': (e, tpl) ->
     $(e.currentTarget).find('li').last().addClass('show')
@@ -13,7 +30,7 @@ UI.registerHelper "test_pls", ->
 
 UI.registerHelper "dis_el", ->
   parent = UI._parentData(1)
-  if parent[@]
+  if parent and parent[@]
     return parent[@]
 
 UI.registerHelper "ex_ctl", ->
@@ -41,14 +58,15 @@ UI.registerHelper "ctl_look", ->
 UI.registerHelper "fhref", ->
   parent = UI._parentData(3)
   me = UI._parentData(1)
-  if parent.data_href and me[parent.data_href]
-    if me[parent.data_href] is "blank"
-      return "/"
-    else
-      return "/#{me[parent.data_href]}"
-  else if parent.data_sub_href and me[parent.data_sub_href]
-    cur = Session.get("current_path")
-    return "/#{cur}/#{me[parent.data_sub_href]}"
+  if parent and me
+    if parent.data_href and me[parent.data_href]
+      if me[parent.data_href] is "blank"
+        return "/"
+      else
+        return "/#{me[parent.data_href]}"
+    else if parent.data_sub_href and me[parent.data_sub_href]
+      cur = Session.get("current_path")
+      return "/#{cur}/#{me[parent.data_sub_href]}"
 
 UI.registerHelper "disp_arr", ->
   parent = UI._parentData(2)
@@ -65,9 +83,16 @@ UI.registerHelper "tem_cal", ->
 
 UI.registerHelper "dat_tem_cal", ->
   parent = Blaze.getCurrentTemplateView().parentView.parentView.template.__templateName
+  cur = Blaze.getCurrentTemplateView().parentView.parentView
   tem = DATA.findOne(_s_n: "templates", tem_n: parent)
   if tem and tem.sub_tem and Template[tem.sub_tem]
-    return Template[tem.sub_tem]
+    if tem.sub_tem is "_btn"
+      a = Blaze.View(the_func)
+      Blaze.materializeView(a, cur)
+      console.log a
+      console.log Blaze
+    else
+      return Template[tem.sub_tem]
   return Template.def_sub_tem
 
 
