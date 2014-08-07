@@ -1,19 +1,22 @@
 the_func = ->
   view = this
   return HTML.A HTML.Attrs(
-    class: ->
-      [
-        "_btn "
-        Spacebars.mustache(view.lookup("_btn_class"))
-      ]
-    href: ->
-      Spacebars.mustache view.lookup("fhref")
+    attr_func(view, "_btn ")
   , ->
     Spacebars.attrMustache view.lookup("_btn_dyn")
   ), "\n    ", Blaze.View(->
     Spacebars.mustache view.lookup("dis_el")
   ), "\n  "
 
+
+attr_func = (view, btn) ->
+  arr = []
+  arr.push(Spacebars.mustache(view.lookup("_btn_class")))
+  arr.push(btn)
+  class: ->
+    arr
+  href: ->
+    Spacebars.mustache view.lookup("fhref")
 
 Template.main_nav.events
   'mouseenter .user': (e, tpl) ->
@@ -87,10 +90,8 @@ UI.registerHelper "dat_tem_cal", ->
   tem = DATA.findOne(_s_n: "templates", tem_n: parent)
   if tem and tem.sub_tem and Template[tem.sub_tem]
     if tem.sub_tem is "_btn"
-      a = Blaze.View(the_func)
-      Blaze.materializeView(a, cur)
-      console.log a
-      console.log Blaze
+      b = Template.__create__('testing', the_func)
+      return b
     else
       return Template[tem.sub_tem]
   return Template.def_sub_tem
