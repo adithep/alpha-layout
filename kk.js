@@ -201,7 +201,7 @@ Template.__define__("each_disp", (function() {
       return Spacebars.mustache(view.lookup("disp"));
     }), "\n  " ];
   });
-}));                                                                                                
+}));
 
 Template.__define__("ctl_tem", (function() {
   var view = this;
