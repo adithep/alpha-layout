@@ -4,19 +4,31 @@ the_func = ->
     attr_func(view, "_btn ")
   , ->
     Spacebars.attrMustache view.lookup("_btn_dyn")
-  ), "\n    ", Blaze.View(->
-    Spacebars.mustache view.lookup("dis_el")
-  ), "\n  "
+  ), "\n    ", dis_el_func(view), "\n  "
 
 
 attr_func = (view, btn) ->
   arr = []
   arr.push(Spacebars.mustache(view.lookup("_btn_class")))
-  arr.push(btn)
+  arr.push(btn_func(view))
   class: ->
     arr
   href: ->
     Spacebars.mustache view.lookup("fhref")
+
+btn_func = (view) ->
+  Blaze.currentView = view
+  console.log Blaze.getCurrentData()
+  console.log Blaze._parentData(1)
+  bb = Session.get("some_btn")
+  return bb
+
+dis_el_func = (view) ->
+  Blaze.currentView = view
+  parent = Blaze._parentData(1)
+  self = Blaze.getCurrentData()
+  if parent and self and parent[self]
+    return parent[self]
 
 Template.main_nav.events
   'mouseenter .user': (e, tpl) ->
@@ -27,12 +39,12 @@ Template.main_nav.events
     Meteor.logout()
 
 UI.registerHelper "test_pls", ->
-  parent = UI._parentData(1)
+  parent = Blaze._parentData(1)
   console.log parent
   console.log @
 
 UI.registerHelper "dis_el", ->
-  parent = UI._parentData(1)
+  parent = Blaze._parentData(1)
   if parent and parent[@]
     return parent[@]
 
@@ -46,7 +58,7 @@ UI.registerHelper "t_data", ->
   return null
 
 UI.registerHelper "disp", ->
-  parent = UI._parentData(1)
+  parent = Blaze._parentData(1)
   if parent[@]
     return parent[@]
 
@@ -59,8 +71,8 @@ UI.registerHelper "ctl_look", ->
       return tem.look_n
 
 UI.registerHelper "fhref", ->
-  parent = UI._parentData(3)
-  me = UI._parentData(1)
+  parent = Blaze._parentData(3)
+  me = Blaze._parentData(1)
   if parent and me
     if parent.data_href and me[parent.data_href]
       if me[parent.data_href] is "blank"
@@ -72,7 +84,7 @@ UI.registerHelper "fhref", ->
       return "/#{cur}/#{me[parent.data_sub_href]}"
 
 UI.registerHelper "disp_arr", ->
-  parent = UI._parentData(2)
+  parent = Blaze._parentData(2)
   if parent.data_dis_key_arr
     return parent.data_dis_key_arr
 UI.registerHelper "tem_cal", ->
@@ -90,6 +102,7 @@ UI.registerHelper "dat_tem_cal", ->
   tem = DATA.findOne(_s_n: "templates", tem_n: parent)
   if tem and tem.sub_tem and Template[tem.sub_tem]
     if tem.sub_tem is "_btn"
+      Session.set("some_btn", "_btn ")
       b = Template.__create__('testing', the_func)
       return b
     else
@@ -99,7 +112,7 @@ UI.registerHelper "dat_tem_cal", ->
 
 UI.registerHelper "make_href", ->
   if @href
-    parent = UI._parentData(1)
+    parent = Blaze._parentData(1)
     ini = Session.get("current_path")
     if ini
       num = parent.depth + 1
@@ -118,13 +131,13 @@ UI.registerHelper "dat_dat", ->
       when "current_user"
         return Meteor.user()
 UI.registerHelper "ctla", ->
-  parent = UI._parentData(1)
+  parent = Blaze._parentData(1)
   if parent._id
     return LDATA.find({_cid: parent._id, _s_n: "data"}, {sort: {sort: 1}})
   return null
 Template.ctl_tem.helpers
   ctl: ->
-    parent = UI._parentData(1)
+    parent = Blaze._parentData(1)
     if parent._id
       return LDATA.find({_pid: parent._id, _s_n: "_ctl"}, {sort: {sort: 1}})
     return null
