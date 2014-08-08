@@ -10,6 +10,7 @@ Package.on_use(function (api, where, asset) {
     'alpha-auth',
     'accounts-base',
     'alpha-stylus',
+    "spacebars-compiler",
     'standard-app-packages']);
   api.add_files([
     'layout.html',
