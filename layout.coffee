@@ -7,9 +7,10 @@ Ctrl =
         @components[ctl._id] = new Ctrlgr(ctl)
       else if ctl._s_n is "data" and ctl._did
         @components[ctl._id] = new Docgr(ctl)
+    if @components[ctl._id] and @components[ctl._id].tem
       return @components[ctl._id].tem
     else
-      console.log @components[ctl._id].tem
+      return null
   get: (id) ->
     return @components[id]
 

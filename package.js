@@ -1,17 +1,20 @@
 Package.describe({
-  summary: "Layout"
+  summary: "Layout",
+  version: "0.0.1"
 });
 
 Package.on_use(function (api, where, asset) {
+  api.versionsFrom("METEOR-CORE@0.9.0-atm");
   api.use([
-    'coffeescript',
-    'core-lib',
-    'utilities',
-    'alpha-auth',
+    'bads:core-lib',
+    'bads:utilities',
+    'bads:alpha-auth',
+    'bads:alpha-stylus',
     'accounts-base',
-    'alpha-stylus',
+    'coffeescript',
     "spacebars-compiler",
-    'standard-app-packages']);
+    'standard-app-packages'
+  ]);
   api.add_files([
     'layout.html',
     'layout.coffee',
@@ -20,7 +23,7 @@ Package.on_use(function (api, where, asset) {
 });
 
 Package.on_test(function (api) {
-  api.use('alpha-layout');
+  api.use("../packages/bads:alpha-layout");
 
   api.add_files('layout_tests.js', ['client', 'server']);
 });
