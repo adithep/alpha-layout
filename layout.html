@@ -17,3 +17,17 @@
     {{/each}}
   {{/with}}
 </template>
+
+<template name="dis_key_tem">
+  <span class=key_dis>{{_sel_key}}</span>
+</template>
+
+<template name="sub_path">
+  <div class="sub_path">
+    {{#with sub_path}}
+      {{#each t_yield}}
+        {{>_sel_spa}}
+      {{/each}}
+    {{/with}}
+  </div>
+</template>

@@ -35,7 +35,7 @@
     cursor pointer
     cursor hand
 
-.nav_title.mara .title_h
+.nav_title.mara .title_h1
   display: block
   float left
   margin: 0
@@ -75,14 +75,57 @@
   font-family: 'Open Sans', Arial
   text-transform: uppercase
   &:hover
-    cursor pointer
-    cursor hand
+    color blue
+._btn_gr.mara
+  position: relative
+  top 50px
+  text-align center
+._btn_gr.mara .container
+  position: relative
+  display inline-block
+  clear both
+  padding: 0 10px
+  border-width: 1px
+  border-style: solid
+  border-color: #343131
+  background: #f7f5ed
+  background: -moz-linear-gradient(top,  #f7f5ed 0%, #ebe9e2 100%)
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f7f5ed), color-stop(100%,#ebe9e2))
+  background: -webkit-linear-gradient(top,  #f7f5ed 0%,#ebe9e2 100%)
+  background: -o-linear-gradient(top,  #f7f5ed 0%,#ebe9e2 100%)
+  background: -ms-linear-gradient(top,  #f7f5ed 0%,#ebe9e2 100%)
+  border-radius(5px)
+  box-shadow(0 0 3px rgba(0,0,0,.05))
+  zoom: 1
+
+._btn_gr.mara ._btn
+  position: relative
+  display: inline-block
+  padding: 18px 22px
+  text-align: center
+  color: #36332e
+  font-weight: 600
+  font-size: 14px
+  font-family: 'Open Sans', Arial
+  text-transform: uppercase
+  &:hover
     color blue
 
-.footer.mara
-  position: absolute
-  bottom 0
-  display: inline-block
+.img_gr.mara
+  position: relative
+  top 50px
+  text-align center
+
+.img_gr.mara .img
+  max-width 180px
+  max-height 180px
+  display inline-block
+
+
+.footer_div.mara
+  display inline-block
+  position relative
+
 
 
 
@@ -101,7 +144,7 @@
 .nav_title.muru
   float left
 
-.nav_title.muru .title_h
+.nav_title.muru .title_h1
   float left
   margin-left 25px
   margin-right 25px
