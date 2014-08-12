@@ -11,11 +11,19 @@
 </body>
 
 <template name="_t_path">
-  {{#with path}}
-    {{#each t_yield}}
-      {{>_sel_spa}}
-    {{/each}}
-  {{/with}}
+  <div class="main_path">
+    {{#with path}}
+      {{#each t_yield}}
+        {{#with c_yield}}
+          {{>_sel_spa}}
+        {{/with}}
+      {{/each}}
+    {{/with}}
+  </div>
+</template>
+
+<template name="_sel_spa_tem">
+  {{>_sel_spa}}
 </template>
 
 <template name="dis_key_tem">
