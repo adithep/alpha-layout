@@ -18,11 +18,22 @@ class DTL
     if ctl
       if ctl.doc.data_href
         if @doc[ctl.doc.data_href]
-          return "/#{@doc[ctl.doc.data_href]}"
+          cur = ses.current_path_n.get()
+          if cur is "/" or "" or ctl.depth is 0
+            return "/#{@doc[ctl.doc.data_href]}"
+          else
+            dish = cur.replace(/^\/|\/$/g, '')
+            arr = dish.split("/")
+            if arr.length is ctl.depth
+              return "#{cur}/#{@doc[ctl.doc.data_href]}"
+            else
+              arr.splice(ctl.depth, arr.length)
+              dash = arr.join("/")
+              return "/#{dash}/#{@doc[ctl.doc.data_href]}"
     return
 
 class CTL
-  constructor: (@doc) ->
+  constructor: (@doc, @depth) ->
 
   c_yield: ->
     if @doc.data
@@ -40,7 +51,7 @@ class CTL
       data_opt = {}
     data_opt.transform = (doc) ->
       if doc._s_n is "_ctl"
-        ses.ctls[doc._id] = new CTL(doc)
+        ses.ctls[doc._id] = new CTL(doc, self.depth)
         return ses.ctls[doc._id]
       else
         return new DTL(doc, self.doc._id)
@@ -67,18 +78,28 @@ class CTL
       return @doc.look_n
     else
       return ses.root.look_n
+  sub_path: ->
+    depth = @depth + 1
+    a = ses.path.get(depth)
+    if a
+
+      data = {_s_n: "_ctl", path_n: a}
+      data_opt = {}
+      data_opt.transform = (doc) ->
+        ses.ctls[doc._id] = new CTL(doc, depth)
+        return ses.ctls[doc._id]
+      return DATA.findOne(data, data_opt)
+    return
 
 UI.registerHelper "path", ->
-  return ses.path.get(0)
-
-
-UI.registerHelper "t_yield", ->
-  if ses.root.paths[@] and ses.root.paths[@].data
-    data = ses.root.paths[@].data
-    data_opt = ses.root.paths[@].data_opt or {}
+  a = ses.path.get(0)
+  if a
+    data = {_s_n: "_ctl", path_n: a}
+    data_opt = {}
     data_opt.transform = (doc) ->
-      return new CTL(doc)
-    return DATA.find(data, data_opt)
+      return new CTL(doc, 0)
+    return DATA.findOne(data, data_opt)
+  return
 
 UI.registerHelper "_sel_doc", ->
   parent = UI._parentData(1)
