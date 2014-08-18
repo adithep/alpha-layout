@@ -34,7 +34,9 @@
 <template name="sub_path">
   <div class="sub_path">
     {{#with sub_path}}
-      {{>_sel_spa}}
+      {{#each c_yield}}
+        {{>_sel_spa}}
+      {{/each}}
     {{/with}}
   </div>
 </template>
