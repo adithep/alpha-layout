@@ -1,0 +1,53 @@
+<template name="each_cyield">
+  {{#each c_yield}}
+    {{>sel_spa}}
+  {{/each}}
+<template>
+
+<template name="div_tem">
+  <div class="{{get_tem_ty}} {{get_look}}">
+    {{>each_cyield}}
+  </div>
+<template>
+
+<template name="nav_with_con_tem">
+  <nav class="{{get_tem_ty}} {{get_look}}">
+    <div class = "container">
+      {{>each_cyield}}
+    </div>
+  </nav>
+<template>
+
+<template name="div_with_con_tem">
+  <div class="{{get_tem_ty}} {{get_look}}">
+    <div class = "container">
+      {{>each_cyield}}
+    </div>
+  </div>
+<template>
+
+<template name="a_tem">
+  <a href="{{get_href}}">
+    {{>doc_spa}}
+  </a>
+<template>
+
+<template name="span_tem">
+  <span class="{{get_tem_ty}} {{get_key}} {{get_evt}}">
+    {{>_sel_doc}}
+  </span>
+<template>
+
+<template name="h1_tem">
+  <h1 class="{{get_tem_ty}} {{get_key}} {{get_evt}}">
+    {{>_sel_doc}}
+  </h1>
+<template>
+
+<template name="img_tem">
+  <img class="{{get_tem_ty}} {{get_evt}} {{get_key}}" src="{{_sel_img}}" alt="{{get_img_caption}}">
+<template>
+
+<template name="input_tem">
+  <input class="{{get_tem_ty}} {{get_evt}}" type="{{get_input_type}}" name="{{get_key}}" value="{{input_value}}" placeholder="{{_sel_input}}">
+<template>

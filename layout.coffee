@@ -11,6 +11,8 @@ class MTL
   _sel_img: ->
     if @dtl.doc.img_uuid
       return "http://localhost:8080/static/img/#{@dtl.doc.img_uuid}"
+  get_key: ->
+    return "key-#{@doc}"
 
 class DTL
   constructor: (@doc, @ctl) ->
@@ -74,6 +76,7 @@ class CTL
 
   data_func: ->
     return
+
   data_dis_key_arr: (dtl) ->
     if @doc.data_dis_key_arr and dtl
       arr = []
@@ -83,15 +86,22 @@ class CTL
         n++
       return arr
 
+  get_tem: ->
+    if @doc.tem_ty_n
+      return DATA.findOne(_s_n: "templates", tem_ty_n: @doc.tem_ty_n)
+
   _sel_spa: ->
-    if Template[@doc.tem_ty_n]
-      return Template[@doc.tem_ty_n]
+    tem = @get_tem()
+    if Template[tem.tem_comp]
+      return Template[tem.tem_comp]
     return null
 
   get_c_tem: ->
-    if Template[@doc.tem_ty_n+"_c"]
-      return Template[@doc.tem_ty_n+"_c"]
+    tem = @get_tem()
+    if Template[tem.doc_comp]
+      return Template[tem.doc_comp]
     return null
+
   get_look: ->
     if @doc.look_n
       return @doc.look_n
@@ -103,6 +113,7 @@ class CTL
         looks = DATA.findOne(_s_n: "apps")
         if looks and looks.look_n
           return looks.look_n
+
   sub_path: ->
     depth = @depth + 1
     a = ses.path.get(depth)
