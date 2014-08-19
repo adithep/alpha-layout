@@ -86,19 +86,15 @@ class CTL
         n++
       return arr
 
-  get_tem: ->
-    if @doc.tem_ty_n
-      return DATA.findOne(_s_n: "templates", tem_ty_n: @doc.tem_ty_n)
-
   _sel_spa: ->
-    tem = @get_tem()
-    if Template[tem.tem_comp]
+    tem = ses.tem[@doc.tem_ty_n].get()
+    if tem and Template[tem.tem_comp]
       return Template[tem.tem_comp]
     return null
 
   get_c_tem: ->
-    tem = @get_tem()
-    if Template[tem.doc_comp]
+    tem = ses.tem[@doc.tem_ty_n].get()
+    if tem and Template[tem.doc_comp]
       return Template[tem.doc_comp]
     return null
 
