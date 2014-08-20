@@ -13,18 +13,33 @@ class MTL
       return "http://localhost:8080/static/img/#{@dtl.doc.img_uuid}"
   get_key: ->
     return "key-#{@doc}"
+  doc_a_spa: ->
+    if @ctl and @ctl.doc.data_href
+      return Template.a_tem
+    else
+      if @ctl.get_c_tem
+        return @ctl.get_c_tem()
+    return null
+  doc_spa: ->
+    if @ctl and @ctl.get_c_tem
+      return @ctl.get_c_tem()
+  get_tem_ty: ->
+    if @ctl and @ctl.get_c_tem_ty
+      return @ctl.get_c_tem_ty()
 
 class DTL
   constructor: (@doc, @ctl) ->
 
   _sel_spa: ->
-    if @ctl and @ctl.get_c_tem
-      return @ctl.get_c_tem()
-    return null
+    return Template.each_kyield
+
   k_yield: ->
     if @ctl and @ctl.data_dis_key_arr
       return @ctl.data_dis_key_arr(@)
     return null
+  get_tem_ty: ->
+    if @ctl and @ctl.get_c_tem_ty
+      return @ctl.get_c_tem_ty()
   get_href: ->
     if @ctl and @ctl.data_href
       href = @ctl.data_href()
@@ -87,16 +102,28 @@ class CTL
       return arr
 
   _sel_spa: ->
-    tem = ses.tem[@doc.tem_ty_n].get()
-    if tem and Template[tem.tem_comp]
-      return Template[tem.tem_comp]
+    if ses.tem[@doc.tem_ty_n]
+      tem = ses.tem[@doc.tem_ty_n].get()
+      if tem and Template[tem.tem_comp]
+        return Template[tem.tem_comp]
     return null
 
   get_c_tem: ->
-    tem = ses.tem[@doc.tem_ty_n].get()
-    if tem and Template[tem.doc_comp]
-      return Template[tem.doc_comp]
+    if ses.tem[@doc.tem_ty_n]
+      tem = ses.tem[@doc.tem_ty_n].get()
+      if tem and Template[tem.doc_comp]
+        return Template[tem.doc_comp]
     return null
+  get_tem_ty: ->
+    if ses.tem[@doc.tem_ty_n]
+      tem = ses.tem[@doc.tem_ty_n].get()
+      if tem and tem.tem_class
+        return tem.tem_class
+  get_c_tem_ty: ->
+    if ses.tem[@doc.tem_ty_n]
+      tem = ses.tem[@doc.tem_ty_n].get()
+      if tem and tem.doc_class
+        return tem.doc_class
 
   get_look: ->
     if @doc.look_n

@@ -1,20 +1,22 @@
 <template name="each_cyield">
   {{#each c_yield}}
-    {{>sel_spa}}
+    {{>_sel_spa}}
   {{/each}}
-<template>
+</template>
 
 <template name="each_kyield">
-  {{#each k_yield}}
-    {{>doc_spa}}
-  {{/each}}
-<template>
+  <div class="d_div">
+    {{#each k_yield}}
+      {{>doc_a_spa}}
+    {{/each}}
+  </div>
+</template>
 
 <template name="div_tem">
   <div class="{{get_tem_ty}} {{get_look}}">
     {{>each_cyield}}
   </div>
-<template>
+</template>
 
 <template name="nav_with_con_tem">
   <nav class="{{get_tem_ty}} {{get_look}}">
@@ -22,7 +24,7 @@
       {{>each_cyield}}
     </div>
   </nav>
-<template>
+</template>
 
 <template name="div_with_con_tem">
   <div class="{{get_tem_ty}} {{get_look}}">
@@ -30,30 +32,41 @@
       {{>each_cyield}}
     </div>
   </div>
-<template>
+</template>
 
 <template name="a_tem">
   <a href="{{get_href}}">
     {{>doc_spa}}
   </a>
-<template>
+</template>
 
 <template name="span_tem">
   <span class="{{get_tem_ty}} {{get_key}} {{get_evt}}">
-    {{>_sel_doc}}
+    {{_sel_doc}}
   </span>
-<template>
+</template>
+
+<template name="span_div_tem">
+  <div class="doc_div">
+    <span class="{{get_tem_ty}} {{get_key}} {{get_evt}}">
+      {{_sel_doc}}
+    </span>
+  </div>
+</template>
 
 <template name="h1_tem">
   <h1 class="{{get_tem_ty}} {{get_key}} {{get_evt}}">
-    {{>_sel_doc}}
+    {{_sel_doc}}
   </h1>
-<template>
+</template>
 
 <template name="img_tem">
-  <img class="{{get_tem_ty}} {{get_evt}} {{get_key}}" src="{{_sel_img}}" alt="{{get_img_caption}}">
-<template>
+  <div class="img_ph">
+    <img class="{{get_tem_ty}} {{get_evt}} {{get_key}}" src="{{_sel_img}}" alt="{{get_img_caption}}">
+  </div>
+
+</template>
 
 <template name="input_tem">
   <input class="{{get_tem_ty}} {{get_evt}}" type="{{get_input_type}}" name="{{get_key}}" value="{{input_value}}" placeholder="{{_sel_input}}">
-<template>
+</template>

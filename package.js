@@ -17,7 +17,7 @@ Package.on_use(function (api, where, asset) {
   ]);
   api.add_files([
     'layout.html',
-    'atem.html',
+    'token.html',
     'layout.coffee',
     'layout.styl',
     'essential.styl'], 'client');
