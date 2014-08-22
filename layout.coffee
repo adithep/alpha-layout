@@ -9,8 +9,8 @@ class MTL
     if @dtl.get_href
       return @dtl.get_href()
   _sel_img: ->
-    if @dtl.doc.img_uuid
-      return "http://localhost:8080/static/img/#{@dtl.doc.img_uuid}"
+    if @dtl.doc[@doc]
+      return "http://localhost:8080/static/img/#{@dtl.doc[@doc]}"
   get_key: ->
     return "key-#{@doc}"
   doc_a_spa: ->
@@ -32,6 +32,10 @@ class DTL
 
   _sel_spa: ->
     return Template.each_kyield
+
+  get_s_n: ->
+    if @doc._s_n
+      return "sn-#{@doc._s_n}"
 
   k_yield: ->
     if @ctl and @ctl.data_dis_key_arr
