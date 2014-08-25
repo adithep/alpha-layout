@@ -1,6 +1,7 @@
 Package.describe({
   summary: "Layout",
-  version: "0.0.1"
+  version: "0.0.1",
+  name: "bads:alpha-layout"
 });
 
 Package.on_use(function (api, where, asset) {
@@ -18,13 +19,14 @@ Package.on_use(function (api, where, asset) {
   api.add_files([
     'layout.html',
     'token.html',
+    'token.js',
     'layout.coffee',
     'layout.styl',
     'essential.styl'], 'client');
 });
 
 Package.on_test(function (api) {
-  api.use("../packages/bads:alpha-layout");
+  api.use("bads:alpha-layout");
 
   api.add_files('layout_tests.js', ['client', 'server']);
 });
