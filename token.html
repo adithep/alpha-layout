@@ -1,4 +1,8 @@
-
+<template name="each_cyield">
+  {{#each c_yield}}
+    {{>_sel_spa}}
+  {{/each}}
+</template>
 
 <template name="each_kyield">
   <div class="d_div {{get_s_n}}">
@@ -10,14 +14,14 @@
 
 <template name="div_tem">
   <div class="{{get_tem_ty}} {{get_look}}">
-    {{>each_cyield}}
+    {{>s_each_cyield}}
   </div>
 </template>
 
 <template name="nav_with_con_tem">
   <nav class="{{get_tem_ty}} {{get_look}}">
     <div class = "container">
-      {{>each_cyield}}
+      {{>s_each_cyield}}
     </div>
   </nav>
 </template>
@@ -25,7 +29,7 @@
 <template name="div_with_con_tem">
   <div class="{{get_tem_ty}} {{get_look}}">
     <div class = "container">
-      {{>each_cyield}}
+      {{>s_each_cyield}}
     </div>
   </div>
 </template>

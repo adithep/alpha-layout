@@ -13,9 +13,7 @@
 <template name="_t_path">
   <div class="main_path">
     {{#with path}}
-      {{#each c_yield}}
-        {{>_sel_spa}}
-      {{/each}}
+      {{>each_cyield}}
     {{/with}}
   </div>
 </template>
@@ -31,9 +29,7 @@
 <template name="sub_path">
   <div class="{{get_tem_ty}}">
     {{#with sub_path}}
-      {{#each c_yield}}
-        {{>_sel_spa}}
-      {{/each}}
+      {{>each_cyield}}
     {{/with}}
   </div>
 </template>

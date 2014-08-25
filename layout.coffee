@@ -3,29 +3,46 @@ class MTL
   constructor: (@doc, @dtl, @ctl) ->
 
   _sel_doc: ->
-    if @dtl.doc and @dtl.doc[@doc]
-      return @dtl.doc[@doc]
+    if typeof @doc is "string"
+      if @dtl.doc[@doc]
+        return @dtl.doc[@doc]
+    else if typeof @doc is "object"
+      if @doc.key_n and @dtl.doc[@doc.key_n]
+        return @dtl.doc[@doc.key_n]
   get_href: ->
     if @dtl.get_href
       return @dtl.get_href()
   _sel_img: ->
-    if @dtl.doc[@doc]
-      return "http://localhost:8080/static/img/#{@dtl.doc[@doc]}"
+
+    if typeof @doc is "string"
+      if @dtl.doc[@doc]
+        return "http://localhost:8080/static/img/#{@dtl.doc[@doc]}"
+    else if typeof @doc is "object"
+      if @doc.key_n and @dtl.doc[@doc.key_n]
+        return "http://localhost:8080/static/img/#{@dtl.doc[@doc.key_n]}"
   get_key: ->
     return "key-#{@doc}"
   doc_a_spa: ->
     if @ctl and @ctl.doc.data_href
       return Template.a_tem
     else
-      if @ctl.get_c_tem
-        return @ctl.get_c_tem()
+      if typeof @doc is "object" and @doc.template and Template[@doc.template]
+        return Template[@doc.template]
+      else
+        if @ctl and @ctl.get_c_tem
+          return @ctl.get_c_tem()
     return null
   doc_spa: ->
-    if @ctl and @ctl.get_c_tem
-      return @ctl.get_c_tem()
+    if typeof @doc is "object" and @doc.template and Template[@doc.template]
+      return Template[@doc.template]
+    else
+      if @ctl and @ctl.get_c_tem
+        return @ctl.get_c_tem()
+    return null
   get_tem_ty: ->
     if @ctl and @ctl.get_c_tem_ty
       return @ctl.get_c_tem_ty()
+    return
 
 class DTL
   constructor: (@doc, @ctl) ->
@@ -110,6 +127,13 @@ class CTL
       tem = ses.tem[@doc.tem_ty_n].get()
       if tem and Template[tem.tem_comp]
         return Template[tem.tem_comp]
+    return null
+
+  s_each_cyield: ->
+    unless @doc.group_key_by_s_n
+      return Template.each_cyield
+    else
+      return Template.each_cyield_a
     return null
 
   get_c_tem: ->
