@@ -40,6 +40,12 @@
   </a>
 </template>
 
+<template name="sel_ea_tem">
+  {{#each _sel_doc_ea}}
+    {{>doc_e_spa}}
+  {{/each}}
+</template>
+
 <template name="span_tem">
   <span class="{{get_tem_ty}} {{get_key}} {{get_evt}}">
     {{_sel_doc}}

@@ -5,30 +5,28 @@ class MTL
   _sel_doc: ->
     if @dtl.doc and @dtl.doc[@doc.key_n]
       return @dtl.doc[@doc.key_n]
+
   get_href: ->
     if @dtl.get_href
       return @dtl.get_href()
+
   _sel_img: ->
     if @dtl.doc[@doc.key_n]
       return "http://localhost:8080/static/img/#{@dtl.doc[@doc.key_n]}"
+
   get_key: ->
     return "key-#{@doc.key_n}"
+
   doc_a_spa: ->
-    if @dtl.doc and @dtl.doc[@doc.key_n]
-      if @ctl and @ctl.doc.data_href
-        return Template.a_tem
-      else if @doc.template
-        tem = ses.tem[@doc.template].get()
-        if tem and tem.doc_comp and Template[tem.doc_comp]
-          return Template[tem.doc_comp]
-      else if @ctl.get_c_tem
-        return @ctl.get_c_tem()
-    else if @doc.key_c and @ctl.get_c_tem_e
-      return @ctl.get_c_tem_e()
+    if @ctl and @ctl.doc.data_href and @doc.key_n and @dtl.doc[@doc.key_n]
+      return Template.a_tem
+    else
+      return @doc_spa()
     return null
+
   doc_spa: ->
     if @dtl.doc and @dtl.doc[@doc.key_n]
-      if @doc.template and Template[@doc.template]
+      if @doc.template
         tem = ses.tem[@doc.template].get()
         if tem and tem.doc_comp and Template[tem.doc_comp]
           return Template[tem.doc_comp]
@@ -37,6 +35,7 @@ class MTL
     else if @doc.key_c and @ctl.get_c_tem_e
       return @ctl.get_c_tem_e()
     return null
+
   get_tem_ty: ->
     if @doc.template and Template[@doc.template]
       tem = ses.tem[@doc.template].get()
@@ -44,6 +43,7 @@ class MTL
         return tem.doc_class
     else if @ctl and @ctl.get_c_tem_ty
       return @ctl.get_c_tem_ty()
+
   _sel_doc_ea: ->
     if @doc.key_c and Array.isArray(@doc.key_c)
       arr = []
@@ -64,6 +64,21 @@ class DTL
   get_s_n: ->
     if @doc._s_n
       return "sn-#{@doc._s_n}"
+
+  get_slave_num: (id_arr) ->
+    num = false
+    if @doc._s_n is @ctl.doc.group_key_by_s_n
+      if id_arr.indexOf(@doc[@ctl.doc.group_key_by_key]) isnt -1
+        num = id_arr.indexOf(@doc[@ctl.doc.group_key_by_key]);
+    else if @ctl.doc.group_key_slave[@doc._s_n]
+      slave_key = @ctl.doc.group_key_slave[@doc._s_n]
+      if id_arr.indexOf(@doc[slave_key]) isnt -1
+        num = id_arr.indexOf(@doc[slave_key])
+    return num
+  join_doc: (ndoc) ->
+    if ndoc
+      for dkey of ndoc
+        @doc[dkey] = ndoc[dkey]
 
   k_yield: ->
     if @ctl and @ctl.data_dis_key_arr
