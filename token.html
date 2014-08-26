@@ -46,6 +46,16 @@
   </span>
 </template>
 
+<template name="span_each_tem">
+  <div class="doc_div">
+    {{#each _sel_doc_ea}}
+      <span class="{{get_tem_ty}} {{get_key}} {{get_evt}}">
+        {{_sel_doc}}
+      </span>
+    {{/each}}
+  </div>
+</template>
+
 <template name="span_div_tem">
   <div class="doc_div">
     <span class="{{get_tem_ty}} {{get_key}} {{get_evt}}">

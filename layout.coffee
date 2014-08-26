@@ -3,46 +3,57 @@ class MTL
   constructor: (@doc, @dtl, @ctl) ->
 
   _sel_doc: ->
-    if typeof @doc is "string"
-      if @dtl.doc[@doc]
-        return @dtl.doc[@doc]
-    else if typeof @doc is "object"
-      if @doc.key_n and @dtl.doc[@doc.key_n]
-        return @dtl.doc[@doc.key_n]
+    if @dtl.doc and @dtl.doc[@doc.key_n]
+      return @dtl.doc[@doc.key_n]
   get_href: ->
     if @dtl.get_href
       return @dtl.get_href()
   _sel_img: ->
-
-    if typeof @doc is "string"
-      if @dtl.doc[@doc]
-        return "http://localhost:8080/static/img/#{@dtl.doc[@doc]}"
-    else if typeof @doc is "object"
-      if @doc.key_n and @dtl.doc[@doc.key_n]
-        return "http://localhost:8080/static/img/#{@dtl.doc[@doc.key_n]}"
+    if @dtl.doc[@doc.key_n]
+      return "http://localhost:8080/static/img/#{@dtl.doc[@doc.key_n]}"
   get_key: ->
-    return "key-#{@doc}"
+    return "key-#{@doc.key_n}"
   doc_a_spa: ->
-    if @ctl and @ctl.doc.data_href
-      return Template.a_tem
-    else
-      if typeof @doc is "object" and @doc.template and Template[@doc.template]
-        return Template[@doc.template]
-      else
-        if @ctl and @ctl.get_c_tem
-          return @ctl.get_c_tem()
+    if @dtl.doc and @dtl.doc[@doc.key_n]
+      if @ctl and @ctl.doc.data_href
+        return Template.a_tem
+      else if @doc.template
+        tem = ses.tem[@doc.template].get()
+        if tem and tem.doc_comp and Template[tem.doc_comp]
+          return Template[tem.doc_comp]
+      else if @ctl.get_c_tem
+        return @ctl.get_c_tem()
+    else if @doc.key_c and @ctl.get_c_tem_e
+      return @ctl.get_c_tem_e()
     return null
   doc_spa: ->
-    if typeof @doc is "object" and @doc.template and Template[@doc.template]
-      return Template[@doc.template]
-    else
-      if @ctl and @ctl.get_c_tem
+    if @dtl.doc and @dtl.doc[@doc.key_n]
+      if @doc.template and Template[@doc.template]
+        tem = ses.tem[@doc.template].get()
+        if tem and tem.doc_comp and Template[tem.doc_comp]
+          return Template[tem.doc_comp]
+      else if @ctl.get_c_tem
         return @ctl.get_c_tem()
+    else if @doc.key_c and @ctl.get_c_tem_e
+      return @ctl.get_c_tem_e()
     return null
   get_tem_ty: ->
-    if @ctl and @ctl.get_c_tem_ty
+    if @doc.template and Template[@doc.template]
+      tem = ses.tem[@doc.template].get()
+      if tem and tem.doc_class
+        return tem.doc_class
+    else if @ctl and @ctl.get_c_tem_ty
       return @ctl.get_c_tem_ty()
-    return
+  _sel_doc_ea: ->
+    if @doc.key_c and Array.isArray(@doc.key_c)
+      arr = []
+      n = 0
+      while n < @doc.key_c.length
+        arr[n] = new MTL(@doc.key_c[n], @dtl, @ctl)
+        n++
+      return arr
+    return null
+
 
 class DTL
   constructor: (@doc, @ctl) ->
@@ -141,6 +152,12 @@ class CTL
       tem = ses.tem[@doc.tem_ty_n].get()
       if tem and Template[tem.doc_comp]
         return Template[tem.doc_comp]
+    return null
+  get_c_tem_e: ->
+    if ses.tem[@doc.tem_ty_n]
+      tem = ses.tem[@doc.tem_ty_n].get()
+      if tem and Template[tem.doc_each_comp]
+        return Template[tem.doc_each_comp]
     return null
   get_tem_ty: ->
     if ses.tem[@doc.tem_ty_n]
