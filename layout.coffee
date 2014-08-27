@@ -66,19 +66,52 @@ class DTL
       return "sn-#{@doc._s_n}"
 
   get_slave_num: (id_arr) ->
-    num = false
-    if @doc._s_n is @ctl.doc.group_key_by_s_n
-      if id_arr.indexOf(@doc[@ctl.doc.group_key_by_key]) isnt -1
-        num = id_arr.indexOf(@doc[@ctl.doc.group_key_by_key]);
-    else if @ctl.doc.group_key_slave[@doc._s_n]
-      slave_key = @ctl.doc.group_key_slave[@doc._s_n]
-      if id_arr.indexOf(@doc[slave_key]) isnt -1
-        num = id_arr.indexOf(@doc[slave_key])
-    return num
+    if @ctl.doc.group_key_by_s_n and id_arr
+      num = false
+      if @doc._s_n is @ctl.doc.group_key_by_s_n
+        id = @doc[@ctl.doc.group_key_by_key]
+        if id_arr.indexOf(@doc[@ctl.doc.group_key_by_key]) isnt -1
+          num = id_arr.indexOf(@doc[@ctl.doc.group_key_by_key])
+
+      else if @ctl.doc.group_key_slave[@doc._s_n]
+        slave_key = @ctl.doc.group_key_slave[@doc._s_n]
+        id = @doc[slave_key]
+        if id_arr.indexOf(@doc[slave_key]) isnt -1
+          num = id_arr.indexOf(@doc[slave_key])
+      return {num: num, id: id}
+    return false
+
+  check_slave: () ->
+    if @ctl.doc.group_key_by_s_n
+      if (@doc._s_n is @ctl.doc.group_key_by_s_n)
+        return true
+      else
+        return false
+    else
+      return true
+    return true
+
   join_doc: (ndoc) ->
+    unless @hist
+      @hist = {}
+    unless @hist[ndoc._s_n]
+      @hist[ndoc._s_n] = {}
     if ndoc
       for dkey of ndoc
+        if @doc[dkey]
+          @hist[ndoc._s_n][dkey] = @doc[dkey]
         @doc[dkey] = ndoc[dkey]
+    return
+
+  unjoin_doc: (ndoc) ->
+    if ndoc
+      for dkey of ndoc
+        if @doc[dkey]
+          if @hist and @hist[ndoc._s_n] and @hist[ndoc._s_n][dkey]
+            @doc[dkey] = @hist[ndoc._s_n][dkey]
+          else
+            delete @doc[dkey]
+    return
 
   k_yield: ->
     if @ctl and @ctl.data_dis_key_arr
