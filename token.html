@@ -70,6 +70,14 @@
   </div>
 </template>
 
+<template name="form_tem">
+  <div class="{{get_tem_ty}} {{get_look}}">
+    <form class="form_div">
+      {{>s_each_cyield}}
+    </form>
+  </div>
+</template>
+
 <template name="h1_tem">
   <h1 class="{{get_tem_ty}} {{get_key}} {{get_evt}}">
     {{_sel_doc}}

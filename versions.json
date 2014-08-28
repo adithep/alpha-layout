@@ -14,7 +14,7 @@
     ],
     [
       "autoupdate",
-      "1.0.4"
+      "1.0.5"
     ],
     [
       "bads:alpha-auth",
@@ -206,6 +206,6 @@
     ]
   ],
   "pluginDependencies": [],
-  "toolVersion": "meteor-tool@1.0.25",
+  "toolVersion": "meteor-tool@1.0.26",
   "format": "1.0"
 }
