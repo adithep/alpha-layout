@@ -17,6 +17,19 @@ class MTL
   get_key: ->
     return "key-#{@doc.key_n}"
 
+  get_evt: ->
+    if @doc._evt
+      return @doc._evt
+
+  input_value: ->
+    if @dtl and @dtl.doc and @dtl.doc._s_n is "_btn"
+      return @_sel_doc()
+
+  get_input_type: ->
+    if @dtl and @dtl.get_input_type
+      return @dtl.get_input_type()
+    return
+
   doc_a_spa: ->
     if @ctl and @ctl.doc.data_href and @doc.key_n and @dtl.doc[@doc.key_n]
       return Template.a_tem
@@ -60,6 +73,17 @@ class DTL
 
   _sel_spa: ->
     return Template.each_kyield
+
+  get_input_type: ->
+    if @doc
+      switch @doc._s_n
+        when "keys"
+          switch @doc.key_ty
+            when "_st"
+              unless @doc.key_r
+                return "text"
+        when "_btn"
+          return "button"
 
   get_s_n: ->
     if @doc._s_n
