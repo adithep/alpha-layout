@@ -21,6 +21,7 @@ Package.on_use(function (api, where, asset) {
     'token.html',
     'token.js',
     'layout.coffee',
+    'evt.coffee',
     'layout.styl',
     'essential.styl'], 'client');
 });

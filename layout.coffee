@@ -1,6 +1,17 @@
 
+ses.form_el = {}
+
 class MTL
   constructor: (@doc, @dtl, @ctl) ->
+    @eid = Random.id()
+    if @ctl and @ctl.doc.form_el
+      @path = @ctl.path + @dtl.doc._id
+      unless ses.form_el[@path]
+        ses.form_el[@path] = new Blaze.ReactiveVar()
+      if @ctl.form and @ctl.regis_form_el
+        @ctl.regis_form_el(@)
+      else if @ctl.opt.form and @ctl.opt.form.regis_form_el
+        @ctl.opt.form.regis_form_el(@)
 
   _sel_doc: ->
     if @dtl.doc and @dtl.doc[@doc.key_n]
@@ -22,8 +33,9 @@ class MTL
       return @doc._evt
 
   input_value: ->
-    if @dtl and @dtl.doc and @dtl.doc._s_n is "_btn"
-      return @_sel_doc()
+    if @path and ses.form_el[@path]
+      return ses.form_el[@path].get()
+    return
 
   get_input_type: ->
     if @dtl and @dtl.get_input_type
@@ -167,13 +179,34 @@ class DTL
     return
 
 class CTL
-  constructor: (@doc, @depth) ->
+  constructor: (@doc, @depth, @path, @opt) ->
+    if @doc.form_ctl
+      @form = {}
 
   c_yield: ->
     if @doc.data
       return DATA.find(@data(), @data_opt())
     else if @doc.data_func
       return @data_func()
+
+  regis_form_el: (mtl) ->
+    if mtl and mtl.eid and @form
+      @form[mtl.eid] = mtl
+
+  form_submit: ->
+    if @form
+      arr = []
+      for key of @form
+        if @form[key].path and ses.form_el[@form[key].path]
+          val = ses.form_el[@form[key].path].get()
+          if val? and val isnt ""
+            if @form[key].dtl.doc.key_n
+              obj = {val : val, key: @form[key].dtl.doc.key_n}
+              arr.push(obj)
+              ses.form_el[@form[key].path].set("")
+      if arr.length > 0
+        Meteor.call 'form_submit', @doc.form_ctl, arr
+
   data_href: ->
     if @doc.data_href
       return @doc.data_href
@@ -186,9 +219,16 @@ class CTL
       data_opt = EJSON.parse(@doc.data_opt)
     else
       data_opt = {}
+    path = @path + @_id
     data_opt.transform = (doc) ->
       if doc._s_n is "_ctl"
-        return new CTL(doc, self.depth)
+        if self.doc.form_ctl
+          opt = {form: self}
+        else if self.opt and self.opt.form
+          opt = {form: self.opt.form}
+        else
+          opt = {}
+        return new CTL(doc, self.depth, path, opt)
       else
         return new DTL(doc, self)
     return data_opt
@@ -259,9 +299,10 @@ class CTL
     a = ses.path.get(depth)
     if a
       data = {_s_n: "a_paths", path_n: a}
+      path = @path + a
       data_opt = {}
       data_opt.transform = (doc) ->
-        return new CTL(doc, depth)
+        return new CTL(doc, depth, path)
       return DATA.findOne(data, data_opt)
     return
 
@@ -271,6 +312,6 @@ UI.registerHelper "path", ->
     data = {_s_n: "a_paths", path_n: a}
     data_opt = {}
     data_opt.transform = (doc) ->
-      return new CTL(doc, 0)
+      return new CTL(doc, 0, a)
     return DATA.findOne(data, data_opt)
   return
