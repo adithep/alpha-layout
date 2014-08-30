@@ -14,8 +14,11 @@ class MTL
         @ctl.opt.form.regis_form_el(@)
 
   _sel_doc: ->
-    if @dtl.doc and @dtl.doc[@doc.key_n]
-      return @dtl.doc[@doc.key_n]
+    if @doc.key_n
+      if @dtl.doc and @dtl.doc[@doc.key_n]
+        return @dtl.doc[@doc.key_n]
+
+    return
 
   get_href: ->
     if @dtl.get_href
@@ -86,14 +89,23 @@ class DTL
   _sel_spa: ->
     return Template.each_kyield
 
+  check_key_ty: (val) ->
+    if val and @doc and @doc.key_ty and Mu.sanatize_key[@doc.key_ty]
+      val = Mu.sanatize_key[@doc.key_ty](val)
+      unless val
+        return true
+    return false
+
+
   get_input_type: ->
     if @doc
       switch @doc._s_n
         when "keys"
           switch @doc.key_ty
-            when "_st"
-              unless @doc.key_r
-                return "text"
+            when "email"
+              return "email"
+            else
+              return "text"
         when "_btn"
           return "button"
 
@@ -128,25 +140,25 @@ class DTL
     return true
 
   join_doc: (ndoc) ->
-    unless @hist
-      @hist = {}
-    unless @hist[ndoc._s_n]
-      @hist[ndoc._s_n] = {}
     if ndoc
+      s_n = @doc._s_n
+      unless @histo
+        @histo = {}
+      unless @histo[@doc._s_n]
+        @histo[@doc._s_n] = EJSON.clone(@doc)
+      @histo[ndoc._s_n] = EJSON.clone(@ndoc)
       for dkey of ndoc
-        if @doc[dkey]
-          @hist[ndoc._s_n][dkey] = @doc[dkey]
         @doc[dkey] = ndoc[dkey]
     return
 
   unjoin_doc: (ndoc) ->
-    if ndoc
-      for dkey of ndoc
-        if @doc[dkey]
-          if @hist and @hist[ndoc._s_n] and @hist[ndoc._s_n][dkey]
-            @doc[dkey] = @hist[ndoc._s_n][dkey]
-          else
-            delete @doc[dkey]
+    if ndoc and ndoc._s_n
+      if @histo and @histo[ndoc._s_n]
+        delete @histo[ndoc._s_n]
+        @doc = {}
+        for kk of @histo
+          for key of @histo[kk]
+            @doc[@histo[kk][key]] = @histo[kk][key]
     return
 
   k_yield: ->
@@ -195,17 +207,16 @@ class CTL
 
   form_submit: ->
     if @form
-      arr = []
+      obj = {}
       for key of @form
         if @form[key].path and ses.form_el[@form[key].path]
           val = ses.form_el[@form[key].path].get()
           if val? and val isnt ""
             if @form[key].dtl.doc.key_n
-              obj = {val : val, key: @form[key].dtl.doc.key_n}
-              arr.push(obj)
+              obj[@form[key].dtl.doc.key_n] = val
               ses.form_el[@form[key].path].set("")
-      if arr.length > 0
-        Meteor.call 'form_submit', @doc.form_ctl, arr
+      if Object.keys(obj).length > 0
+        Meteor.call 'form_submit', @doc.form_ctl, obj
 
   data_href: ->
     if @doc.data_href
@@ -234,6 +245,14 @@ class CTL
     return data_opt
 
   data_func: ->
+    if @doc.data_func
+      switch @doc.data_func
+        when "current_path"
+          paa = ses.current_path_arr.get()
+          if paa
+            pa = paa[paa.length - 1]
+            if pa
+              return DATA.find({_s_n: "paths", path_n: pa}, @data_opt())
     return
 
   data_dis_key_arr: (dtl) ->
@@ -241,6 +260,8 @@ class CTL
       arr = []
       n = 0
       while n < @doc.data_dis_key_arr.length
+        if @doc.data_dis_key_arr[n][dtl._id]
+          @doc.data_dis_key_arr[n] = @doc.data_dis_key_arr[n][dtl._id]
         arr[n] = new MTL(@doc.data_dis_key_arr[n], dtl, @)
         n++
       return arr

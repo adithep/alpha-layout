@@ -5,6 +5,8 @@ UI.body.events
     val = Mu.del_white_spa(val)
     if @path and ses.form_el[@path]
       ses.form_el[@path].set(val)
+    if @dtl and @dtl.check_key_ty and @dtl.check_key_ty(val)
+      @dtl.check_key_ty(val)
 
   'click .form_submit': (e, t) ->
     if @ctl
