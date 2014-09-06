@@ -176,16 +176,17 @@ class DTL
           return "/"
         else
           if @doc[href]
+            depth = @ctl.depth.length - 1
             cur = ses.current_path_n.get()
-            if cur is "/" or "" or @ctl.depth is 0
+            if cur is "/" or cur is "" or depth is 0
               return "/#{@doc[href]}"
             else
               dish = Mu.remove_first_last_slash(cur)
               arr = dish.split("/")
-              if arr.length is @ctl.depth
+              if arr.length is depth
                 return "#{cur}/#{@doc[href]}"
               else
-                arr.splice(@ctl.depth, arr.length)
+                arr.splice(depth, arr.length)
                 dash = arr.join("/")
                 return "/#{dash}/#{@doc[href]}"
     return
@@ -316,7 +317,7 @@ class CTL
           return looks.look_n
 
   sub_path: ->
-    depth = @depth + 1
+    depth = "#{@depth}0"
     a = ses.path.get(depth)
     if a
       data = {_s_n: "a_paths", path_n: a}
@@ -333,6 +334,6 @@ UI.registerHelper "path", ->
     data = {_s_n: "a_paths", path_n: a}
     data_opt = {}
     data_opt.transform = (doc) ->
-      return new CTL(doc, 0, a)
+      return new CTL(doc, "0", a)
     return DATA.findOne(data, data_opt)
   return
