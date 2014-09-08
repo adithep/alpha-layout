@@ -9,19 +9,25 @@ UI.body.events
     if e.currentTarget.value is ""
       if @errvis
         @errvis.set('hide')
-      if @errsate
+      if @errvisg
+        @errvisg.set('hide')
+      if @errstate
         @errstate.set('blank')
     else
       if @dtl and @dtl.check_key_ty
         if @dtl.check_key_ty(val)
+          if @errvisg
+            @errvisg.set('show')
           if @errvis
             @errvis.set('show')
-          if @errsate
+          if @errstate
             @errstate.set('error')
         else
+          if @errvisg
+            @errvisg.set('show')
           if @errvis
             @errvis.set('hide')
-          if @errsate
+          if @errstate
             @errstate.set('ok')
 
   'click .form_submit': (e, t) ->

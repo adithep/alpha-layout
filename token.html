@@ -103,14 +103,15 @@
 
 <template name="input_tem">
   <input class="{{get_tem_ty}} {{get_evt}} {{get_err_state}}" type="{{get_input_type}}" name="{{get_key}}" value="{{input_value}}" placeholder="{{_sel_doc}}">
+  <span class="error_icon {{get_error_icon_font}} {{get_visibility_glyph}}">{{get_error_icon}}</span>
   <span class="error_msg {{get_visibility}}">{{get_error_msg}}</span>
-  <span class="error_icon {{get_error_icon}} {{get_visibility}}"></span>
 </template>
 
 <template name="textarea_tem">
   <textarea class="{{get_tem_ty}} {{get_evt}} {{get_err_state}}" name="{{get_key}}" placeholder="{{_sel_doc}}">
     {{input_value}}
   </textarea>
+  <span class="error_icon {{get_error_icon_font}} {{get_visibility_glpyh}}">{{get_error_icon}}</span>
   <span class="error_msg {{get_visibility}}">{{get_error_msg}}</span>
-  <span class="error_icon {{get_error_icon}} {{get_visibility}}"></span>
+
 </template>

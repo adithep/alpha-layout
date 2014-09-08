@@ -33,6 +33,37 @@ class MTL
         return true
     return false
 
+  get_error_icon_font: ->
+    if @errstate
+      errstate = @errstate.get()
+      if errstate and errstate isnt 'blank'
+        app = ses.app.get()
+        if app and app.form_state_set_n
+          state = ses.state_glyph[app.form_state_set_n].get()
+          if state
+            if errstate is 'error'
+              if state.error_font
+                return "key-#{state.error_font}"
+            else if errstate is 'ok'
+              if state.ok_font
+                return "key-#{state.ok_font}"
+    return
+
+  get_error_icon: ->
+    if @errstate
+      errstate = @errstate.get()
+      if errstate and errstate isnt 'blank'
+        app = ses.app.get()
+        if app and app.form_state_set_n
+          state = ses.state_glyph[app.form_state_set_n].get()
+          if state
+            if errstate is 'error'
+              if state.error_code
+                return state.error_code
+            else if errstate is 'ok'
+              if state.ok_code
+                return state.ok_code
+    return
   get_err_state: ->
     unless @errstate
       @errstate = new Blaze.ReactiveVar('blank')
@@ -42,6 +73,11 @@ class MTL
     unless @errvis
       @errvis = new Blaze.ReactiveVar('hide')
     return @errvis.get()
+
+  get_visibility_glyph: ->
+    unless @errvisg
+      @errvisg = new Blaze.ReactiveVar('hide')
+    return @errvisg.get()
 
   get_error_msg: ->
     unless @errmsg
@@ -251,6 +287,12 @@ class CTL
             if @form[key].dtl.doc.key_n
               obj[@form[key].dtl.doc.key_n] = val
               ses.form_el[@form[key].path].set("")
+        if @form[key].errstate
+          @form[key].errstate.set('blank')
+        if @form[key].errvis
+          @form[key].errvis.set('hide')
+        if @form[key].errvisg
+          @form[key].errvisg.set('hide')
       if Object.keys(obj).length > 0
         Meteor.call 'form_submit', @doc.form_ctl, obj
 
