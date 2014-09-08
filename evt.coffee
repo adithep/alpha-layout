@@ -1,12 +1,28 @@
 UI.body.events
 
   'blur .form_insert': (e, t) ->
+
     val = e.currentTarget.value or ""
     val = Mu.del_white_spa(val)
     if @path and ses.form_el[@path]
       ses.form_el[@path].set(val)
-    if @dtl and @dtl.check_key_ty and @dtl.check_key_ty(val)
-      @dtl.check_key_ty(val)
+    if e.currentTarget.value is ""
+      if @errvis
+        @errvis.set('hide')
+      if @errsate
+        @errstate.set('blank')
+    else
+      if @dtl and @dtl.check_key_ty
+        if @dtl.check_key_ty(val)
+          if @errvis
+            @errvis.set('show')
+          if @errsate
+            @errstate.set('error')
+        else
+          if @errvis
+            @errvis.set('hide')
+          if @errsate
+            @errstate.set('ok')
 
   'click .form_submit': (e, t) ->
     if @ctl
@@ -14,3 +30,23 @@ UI.body.events
         @ctl.form_submit()
       else if @ctl.opt.form and @ctl.opt.form.form_submit
         @ctl.opt.form.form_submit()
+
+  'mouseenter .drop': (e, t) ->
+    if @dvis
+      @dvis.set("show")
+
+  'mouseleave .drop': (e, t) ->
+    if @dvis
+      @dvis.set("hide")
+
+  'mouseenter .dropdown': (e, t) ->
+    if @ptl.dvis
+      @ptl.dvis.set("show")
+
+  'mouseleave .dropdown': (e, t) ->
+    if @ptl.dvis
+      @ptl.dvis.set("hide")
+
+  'mouseenter .sub_sub_path': (e, t) ->
+    if @doc.path_dis
+      ses.current_path_h.set(@doc.path_dis)

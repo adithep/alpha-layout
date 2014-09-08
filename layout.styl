@@ -21,6 +21,23 @@
   padding 0
   height 100%
 
+.banner.mara
+  text-align center
+  position relative
+  display inline-block
+  top -10px
+  left 70px
+  padding 7px
+  border-width: 1px
+  border-style: solid
+  border-color: $text-white
+  z-index 9999
+  @media screen and (max-width: 700px)
+    left -170px
+
+.banner.mara .span_banner
+  font-size 50px
+  color $text-white
 
 
 .main_nav.mara
@@ -39,6 +56,12 @@
   margin 0 auto
   padding 0
   position relative
+
+.main_nav.mara .dropdown
+  top 35px
+
+.main_nav.mara .dropdown .container
+  max-width 500px
 
 .nav_title.mara
   margin-left 35px

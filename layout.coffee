@@ -6,6 +6,7 @@ ses.form_el = {}
 class MTL
   constructor: (@doc, @dtl, @ctl) ->
     @eid = Random.id()
+    @depth = @ctl.ptl.depth
     if @ctl and @ctl.doc.form_el
       @path = @ctl.path + @dtl.doc._id
       unless ses.form_el[@path]
@@ -17,16 +18,40 @@ class MTL
 
   dyield: ->
     if @doc.dropdown
-      switch @doc.dropdown
-        when 'path'
-          if @ctl.doc.href
-    return
+      if @dtl.doc[@doc.dropdown]
+        obj = {data: @dtl.doc[@doc.dropdown]}
+        if @dtl.doc["#{@dtl.doc[@doc.dropdown]}_opt"]
+          obj.data_opt = @dtl.doc["#{dkey}_opt"]
+        ctl = new CTL(obj, @, @ctl.path)
+        @dvis = new Blaze.ReactiveVar('hide')
+        return ctl
+    return false
+
+  dropdown: ->
+    if @doc.dropdown
+      if @dtl.doc[@doc.dropdown]
+        return true
+    return false
+
+  get_err_state: ->
+    unless @errstate
+      @errstate = new Blaze.ReactiveVar('blank')
+    return @errstate.get()
+
+  get_visibility: ->
+    unless @errvis
+      @errvis = new Blaze.ReactiveVar('hide')
+    return @errvis.get()
+
+  get_error_msg: ->
+    unless @errmsg
+      @errmsg = new Blaze.ReactiveVar('Bad Value Type')
+    return @errmsg.get()
 
   _sel_doc: ->
     if @doc.key_n
       if @dtl.doc and @dtl.doc[@doc.key_n]
         return @dtl.doc[@doc.key_n]
-
     return
 
   get_href: ->
@@ -177,6 +202,7 @@ class DTL
   get_tem_ty: ->
     if @ctl and @ctl.get_c_tem_ty
       return @ctl.get_c_tem_ty()
+
   get_href: ->
     if @ctl and @ctl.data_href
       href = @ctl.data_href()
@@ -185,7 +211,6 @@ class DTL
           return "/"
         else
           if @doc[href]
-            console.log @ctl
             depth = @ctl.ptl.depth.length - 1
             cur = ses.current_path_n.get()
             if cur is "/" or cur is "" or depth is 0
@@ -203,7 +228,6 @@ class DTL
 
 class CTL
   constructor: (@doc, @ptl, @path, @opt) ->
-    console.log @
     if @doc.form_ctl
       @form = {}
 
@@ -260,11 +284,12 @@ class CTL
     if @doc.data_func
       switch @doc.data_func
         when "current_path"
-          paa = ses.current_path_arr.get()
+          paa = ses.current_path_h.get()
           if paa
-            pa = paa[paa.length - 1]
-            if pa
-              return DATA.find({_s_n: "paths", path_n: pa}, @data_opt())
+            obj = {path_dis: paa}
+            dtl = new DTL(obj, @)
+            return [dtl]
+
     return
 
   data_dis_key_arr: (dtl) ->
@@ -291,6 +316,11 @@ class CTL
     else
       return Template.each_cyield_a
     return null
+
+  get_visibility: ->
+    if @ptl.dvis
+      return @ptl.dvis.get()
+    return
 
   get_c_tem: ->
     if ses.tem[@doc.tem_ty_n]

@@ -32,7 +32,9 @@
   <div class="{{get_tem_ty}}">
     {{#each esub_path}}
       {{#with sub_path}}
-        {{>each_cyield}}
+        <div class="sub_sub_path">
+          {{>each_cyield}}
+        </div>        
       {{/with}}
     {{/each}}
   </div>
