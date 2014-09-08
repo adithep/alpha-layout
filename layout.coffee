@@ -1,6 +1,8 @@
 
 ses.form_el = {}
 
+
+
 class MTL
   constructor: (@doc, @dtl, @ctl) ->
     @eid = Random.id()
@@ -12,6 +14,13 @@ class MTL
         @ctl.regis_form_el(@)
       else if @ctl.opt.form and @ctl.opt.form.regis_form_el
         @ctl.opt.form.regis_form_el(@)
+
+  dyield: ->
+    if @doc.dropdown
+      switch @doc.dropdown
+        when 'path'
+          if @ctl.doc.href
+    return
 
   _sel_doc: ->
     if @doc.key_n
@@ -26,7 +35,7 @@ class MTL
 
   _sel_img: ->
     if @dtl.doc[@doc.key_n]
-      return "http://localhost:8080/static/img/#{@dtl.doc[@doc.key_n]}"
+      return "#{img_p}#{@dtl.doc[@doc.key_n]}"
 
   get_key: ->
     return "key-#{@doc.key_n}"
@@ -176,7 +185,8 @@ class DTL
           return "/"
         else
           if @doc[href]
-            depth = @ctl.depth.length - 1
+            console.log @ctl
+            depth = @ctl.ptl.depth.length - 1
             cur = ses.current_path_n.get()
             if cur is "/" or cur is "" or depth is 0
               return "/#{@doc[href]}"
@@ -192,7 +202,8 @@ class DTL
     return
 
 class CTL
-  constructor: (@doc, @depth, @path, @opt) ->
+  constructor: (@doc, @ptl, @path, @opt) ->
+    console.log @
     if @doc.form_ctl
       @form = {}
 
@@ -240,7 +251,7 @@ class CTL
           opt = {form: self.opt.form}
         else
           opt = {}
-        return new CTL(doc, self.depth, path, opt)
+        return new CTL(doc, self.ptl, path, opt)
       else
         return new DTL(doc, self)
     return data_opt
@@ -316,24 +327,47 @@ class CTL
         if looks and looks.look_n
           return looks.look_n
 
-  sub_path: ->
-    depth = "#{@depth}0"
+  sub_path_loop: (depth, arri) ->
+    arr = arri or []
     a = ses.path.get(depth)
+    path = @path + a
     if a
-      data = {_s_n: "a_paths", path_n: a}
-      path = @path + a
+      a = new PTL(a, depth, path)
+      arr.push(a)
+      dep = depth.slice(-1)
+      depth = depth.slice(0, -1)
+      dep = Number(dep)
+      dep++
+      dep = String(dep)
+      depth = "#{depth}#{dep}"
+      arr = @sub_path_loop(depth, arr)
+    return arr
+
+
+  esub_path: ->
+    a = @sub_path_loop("#{@ptl.depth}0")
+    if a and a.length >= 1
+      return a
+    return null
+
+
+
+class PTL
+  constructor: (@doc, @depth, @path) ->
+
+  sub_path: ->
+    self = this
+    if @doc
+      data = {_s_n: "a_paths", path_n: @doc}
       data_opt = {}
       data_opt.transform = (doc) ->
-        return new CTL(doc, depth, path)
+        return new CTL(doc, self, self.path)
       return DATA.findOne(data, data_opt)
     return
 
 UI.registerHelper "path", ->
   a = ses.path.get(0)
   if a
-    data = {_s_n: "a_paths", path_n: a}
-    data_opt = {}
-    data_opt.transform = (doc) ->
-      return new CTL(doc, "0", a)
-    return DATA.findOne(data, data_opt)
+    a = new PTL(a, "0", a)
+    return a
   return

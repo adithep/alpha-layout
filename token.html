@@ -50,6 +50,15 @@
   <span class="{{get_tem_ty}} {{get_key}} {{get_evt}}">
     {{_sel_doc}}
   </span>
+  {{>drop_tem}}
+</template>
+
+<template name="drop_tem">
+  {{#with dyield}}
+    <div class="dropdown {{get_visibility}}">
+      {{>s_each_cyield}}
+    </div>
+  {{/with}}
 </template>
 
 <template name="span_each_tem">
@@ -68,6 +77,7 @@
       {{_sel_doc}}
     </span>
   </div>
+  {{>drop_tem}}
 </template>
 
 <template name="form_tem">
@@ -82,21 +92,24 @@
   <h1 class="{{get_tem_ty}} {{get_key}} {{get_evt}}">
     {{_sel_doc}}
   </h1>
+  {{>drop_tem}}
 </template>
 
 <template name="img_tem">
   <div class="img_ph">
     <img class="{{get_tem_ty}} {{get_evt}} {{get_key}}" src="{{_sel_img}}" alt="{{get_img_caption}}">
   </div>
-
+  {{>drop_tem}}
 </template>
 
 <template name="input_tem">
   <input class="{{get_tem_ty}} {{get_evt}}" type="{{get_input_type}}" name="{{get_key}}" value="{{input_value}}" placeholder="{{_sel_doc}}">
+  {{>drop_tem}}
 </template>
 
 <template name="textarea_tem">
   <textarea class="{{get_tem_ty}} {{get_evt}}" name="{{get_key}}" placeholder="{{_sel_doc}}">
     {{input_value}}
   </textarea>
+  {{>drop_tem}}
 </template>
