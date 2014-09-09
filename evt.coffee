@@ -1,3 +1,6 @@
+hide_ctl = (ctl) ->
+  ctl.set('hide')
+
 UI.body.events
 
   'blur .form_insert': (e, t) ->
@@ -33,9 +36,12 @@ UI.body.events
   'click .form_submit': (e, t) ->
     if @ctl
       if @ctl.form and @ctl.form_submit
-        @ctl.form_submit()
+        ctl = @ctl
       else if @ctl.opt.form and @ctl.opt.form.form_submit
-        @ctl.opt.form.form_submit()
+        ctl = @ctl.opt.form
+      if ctl
+        ctl.form_submit()
+
 
   'mouseenter .drop': (e, t) ->
     if @dvis

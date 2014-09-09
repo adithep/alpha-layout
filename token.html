@@ -84,6 +84,7 @@
 <template name="form_tem">
   <div class="{{get_tem_ty}} {{get_look}}">
     <form class="form_div">
+      <span class="submit_msg {{get_submit_visibility}}">{{get_submit_msg}}</span>
       {{>s_each_cyield}}
     </form>
   </div>

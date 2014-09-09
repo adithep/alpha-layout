@@ -66,18 +66,43 @@ class MTL
     return
   get_err_state: ->
     unless @errstate
-      @errstate = new Blaze.ReactiveVar('blank')
+      state = 'blank'
+      if @path and ses.form_el[@path]
+        el = ses.form_el[@path].get()
+        if el and el isnt ""
+          if @dtl.check_key_ty(el)
+            state = 'error'
+          else
+            state = 'ok'
+      @errstate = new Blaze.ReactiveVar(state)
     return @errstate.get()
 
   get_visibility: ->
-    unless @errvis
-      @errvis = new Blaze.ReactiveVar('hide')
-    return @errvis.get()
+    app = ses.app.get()
+    if app and app.form_show_error_message
+      unless @errvis
+        state = 'hide'
+        if @path and ses.form_el[@path]
+          el = ses.form_el[@path].get()
+          if el and el isnt ""
+            if @dtl.check_key_ty(el)
+              state = 'show'
+        @errvis = new Blaze.ReactiveVar(state)
+      return @errvis.get()
+    return 'hide'
 
   get_visibility_glyph: ->
-    unless @errvisg
-      @errvisg = new Blaze.ReactiveVar('hide')
-    return @errvisg.get()
+    app = ses.app.get()
+    if app and app.form_show_error_glyph
+      unless @errvisg
+        state = 'hide'
+        if @path and ses.form_el[@path]
+          el = ses.form_el[@path].get()
+          if el and el isnt ""
+            state = 'show'
+        @errvisg = new Blaze.ReactiveVar(state)
+      return @errvisg.get()
+    return 'hide'
 
   get_error_msg: ->
     unless @errmsg
@@ -277,24 +302,78 @@ class CTL
     if mtl and mtl.eid and @form
       @form[mtl.eid] = mtl
 
+  get_submit_msg: ->
+    unless @submsg
+      app = ses.app.get()
+      if app and app.default_form_submit_message
+        @submsg = new Blaze.ReactiveVar(app.default_form_submit_message)
+      else
+        @submsg = new Blaze.ReactiveVar('submited')
+    return @submsg.get()
+
+  get_submit_visibility: ->
+    unless @subvis
+      @subvis = new Blaze.ReactiveVar('hide')
+    return @subvis.get()
   form_submit: ->
+    self = this
     if @form
       obj = {}
+      legit = true
       for key of @form
         if @form[key].path and ses.form_el[@form[key].path]
+          if @form[key].errstate
+            err = @form[key].errstate.get()
+            if err is 'error'
+              legit = false
+              break
           val = ses.form_el[@form[key].path].get()
           if val? and val isnt ""
             if @form[key].dtl.doc.key_n
               obj[@form[key].dtl.doc.key_n] = val
-              ses.form_el[@form[key].path].set("")
-        if @form[key].errstate
-          @form[key].errstate.set('blank')
-        if @form[key].errvis
-          @form[key].errvis.set('hide')
-        if @form[key].errvisg
-          @form[key].errvisg.set('hide')
-      if Object.keys(obj).length > 0
-        Meteor.call 'form_submit', @doc.form_ctl, obj
+      if legit is true
+        if Object.keys(obj).length > 0
+          if !@doc.form_required or Mu.parse_json_logic(@doc.form_required, obj)
+            for key of @form
+              if @form[key].path and ses.form_el[@form[key].path]
+                ses.form_el[@form[key].path].set("")
+                if @form[key].errstate
+                  @form[key].errstate.set('blank')
+                if @form[key].errvis
+                  @form[key].errvis.set('hide')
+                if @form[key].errvisg
+                  @form[key].errvisg.set('hide')
+            fobj = {}
+            fobj._s_n = @doc.form_ctl
+            app = ses.app.get()
+            if app and app.app_n
+              fobj.app_n = app.app_n
+            if @doc.form_auto_add
+              fobj.form_auto_add = @doc.form_auto_add
+            Meteor.call 'form_submit', fobj, obj
+            if @submsg
+              app = ses.app.get()
+              if app and app.default_form_submit_message
+                @submsg.set(app.default_form_submit_message)
+              else
+                @submsg.set('submited')
+          else
+            if @submsg
+              @submsg.set('Please fill the required field')
+        else
+          if @submsg
+            @submsg.set('Please fill the required field')
+      else
+        if @submsg
+          @submsg.set('Please fill in the correct information')
+    if @subvis
+      if @subvistime
+        Meteor.clearTimeout(@subvistime)
+      @subvis.set('show')
+      @subvistime = Meteor.setTimeout (->
+        self.subvis.set('hide')
+        return
+      ), 4000
 
   data_href: ->
     if @doc.data_href
@@ -363,6 +442,7 @@ class CTL
     if @ptl.dvis
       return @ptl.dvis.get()
     return
+
 
   get_c_tem: ->
     if ses.tem[@doc.tem_ty_n]
