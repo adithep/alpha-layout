@@ -19,9 +19,12 @@ Package.on_use(function (api, where, asset) {
   api.add_files([
     'layout.html',
     'token.html',
+    'token_bootstrap.html',
     'token.js',
     'layout.coffee',
     'evt.coffee',
+    'bootstrap.css',
+    'bootstrap-theme.css',
     'layout.styl',
     'essential.styl'], 'client');
 });

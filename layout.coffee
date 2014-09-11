@@ -86,7 +86,7 @@ class MTL
           el = ses.form_el[@path].get()
           if el and el isnt ""
             if @dtl.check_key_ty(el)
-              state = 'show'
+              state = 'showa'
         @errvis = new Blaze.ReactiveVar(state)
       return @errvis.get()
     return 'hide'
@@ -99,7 +99,7 @@ class MTL
         if @path and ses.form_el[@path]
           el = ses.form_el[@path].get()
           if el and el isnt ""
-            state = 'show'
+            state = 'showa'
         @errvisg = new Blaze.ReactiveVar(state)
       return @errvisg.get()
     return 'hide'
@@ -150,7 +150,7 @@ class MTL
   doc_spa: ->
     if @dtl.doc and @dtl.doc[@doc.key_n]
       if @doc.template
-        tem = ses.tem[@doc.template].get()
+        tem = ses.templates[@doc.template].get()
         if tem and tem.doc_comp and Template[tem.doc_comp]
           return Template[tem.doc_comp]
       else if @ctl.get_c_tem
@@ -161,7 +161,7 @@ class MTL
 
   get_tem_ty: ->
     if @doc.template and Template[@doc.template]
-      tem = ses.tem[@doc.template].get()
+      tem = ses.templates[@doc.template].get()
       if tem and tem.doc_class
         return tem.doc_class
     else if @ctl and @ctl.get_c_tem_ty
@@ -369,7 +369,7 @@ class CTL
     if @subvis
       if @subvistime
         Meteor.clearTimeout(@subvistime)
-      @subvis.set('show')
+      @subvis.set('showa')
       @subvistime = Meteor.setTimeout (->
         self.subvis.set('hide')
         return
@@ -425,8 +425,8 @@ class CTL
       return arr
 
   _sel_spa: ->
-    if ses.tem[@doc.tem_ty_n]
-      tem = ses.tem[@doc.tem_ty_n].get()
+    if ses.templates[@doc.tem_ty_n]
+      tem = ses.templates[@doc.tem_ty_n].get()
       if tem and Template[tem.tem_comp]
         return Template[tem.tem_comp]
     return null
@@ -445,39 +445,49 @@ class CTL
 
 
   get_c_tem: ->
-    if ses.tem[@doc.tem_ty_n]
-      tem = ses.tem[@doc.tem_ty_n].get()
+    if ses.templates[@doc.tem_ty_n]
+      tem = ses.templates[@doc.tem_ty_n].get()
       if tem and Template[tem.doc_comp]
         return Template[tem.doc_comp]
     return null
   get_c_tem_e: ->
-    if ses.tem[@doc.tem_ty_n]
-      tem = ses.tem[@doc.tem_ty_n].get()
+    if ses.templates[@doc.tem_ty_n]
+      tem = ses.templates[@doc.tem_ty_n].get()
       if tem and Template[tem.doc_each_comp]
         return Template[tem.doc_each_comp]
     return null
   get_tem_ty: ->
-    if ses.tem[@doc.tem_ty_n]
-      tem = ses.tem[@doc.tem_ty_n].get()
+    if ses.templates[@doc.tem_ty_n]
+      tem = ses.templates[@doc.tem_ty_n].get()
       if tem and tem.tem_class
         return tem.tem_class
   get_c_tem_ty: ->
-    if ses.tem[@doc.tem_ty_n]
-      tem = ses.tem[@doc.tem_ty_n].get()
+    if ses.templates[@doc.tem_ty_n]
+      tem = ses.templates[@doc.tem_ty_n].get()
       if tem and tem.doc_class
         return tem.doc_class
+
+  get_size: ->
+    if @doc.size
+      return @doc.size
+    else if ses.tem_looks[@doc.tem_ty_n]
+      looks = ses.tem_looks[@doc.tem_ty_n].get()
+      if looks and looks.size
+        return looks.size
+    return
 
   get_look: ->
     if @doc.look_n
       return @doc.look_n
-    else
-      looks = DATA.findOne(_s_n: "tem_looks", tem_ty_n: @doc.tem_ty_n)
+    else if ses.tem_looks[@doc.tem_ty_n]
+      looks = ses.tem_looks[@doc.tem_ty_n].get()
       if looks and looks.look_n
         return looks.look_n
-      else
-        looks = DATA.findOne(_s_n: "apps")
-        if looks and looks.look_n
-          return looks.look_n
+    else
+      looks = ses.app.get()
+      if looks and looks.look_n
+        return looks.look_n
+    return
 
   sub_path_loop: (depth, arri) ->
     arr = arri or []

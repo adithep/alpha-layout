@@ -20,14 +20,14 @@ UI.body.events
       if @dtl and @dtl.check_key_ty
         if @dtl.check_key_ty(val)
           if @errvisg
-            @errvisg.set('show')
+            @errvisg.set('showa')
           if @errvis
-            @errvis.set('show')
+            @errvis.set('showa')
           if @errstate
             @errstate.set('error')
         else
           if @errvisg
-            @errvisg.set('show')
+            @errvisg.set('showa')
           if @errvis
             @errvis.set('hide')
           if @errstate
@@ -45,7 +45,7 @@ UI.body.events
 
   'mouseenter .drop': (e, t) ->
     if @dvis
-      @dvis.set("show")
+      @dvis.set("showa")
 
   'mouseleave .drop': (e, t) ->
     if @dvis
@@ -53,7 +53,7 @@ UI.body.events
 
   'mouseenter .dropdown': (e, t) ->
     if @ptl.dvis
-      @ptl.dvis.set("show")
+      @ptl.dvis.set("showa")
 
   'mouseleave .dropdown': (e, t) ->
     if @ptl.dvis

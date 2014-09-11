@@ -14,22 +14,28 @@
 </template>
 
 <template name="div_tem">
-  <div class="{{get_tem_ty}} {{get_look}}">
+  <div class="{{get_tem_ty}} {{get_look}} {{get_size}}">
     {{>s_each_cyield}}
   </div>
 </template>
 
+<template name="ul_tem">
+  <ul class="{{get_tem_ty}} {{get_look}}">
+    {{>s_each_cyield}}
+  </ul>
+</template>
+
 <template name="nav_with_con_tem">
   <nav class="{{get_tem_ty}} {{get_look}}">
-    <div class = "container">
+    <div class = "container_div">
       {{>s_each_cyield}}
     </div>
   </nav>
 </template>
 
 <template name="div_with_con_tem">
-  <div class="{{get_tem_ty}} {{get_look}}">
-    <div class = "container">
+  <div class="{{get_tem_ty}} {{get_look}} {{get_size}}">
+    <div class = "container_div">
       {{>s_each_cyield}}
     </div>
   </div>
@@ -45,6 +51,24 @@
   {{#each _sel_doc_ea}}
     {{>doc_e_spa}}
   {{/each}}
+</template>
+
+<template name="an_tem">
+  <a class="{{get_tem_ty}} {{get_key}} {{get_evt}}">
+    {{_sel_doc}}
+  </a>
+</template>
+
+<template name="li_tem">
+  <li class="{{get_tem_ty}} {{get_key}} {{get_evt}}">
+    {{_sel_doc}}
+  </li>
+</template>
+
+<template name="_btn_tem">
+  <button type="button" class="{{get_tem_ty}} {{get_key}} {{get_evt}}">
+    {{_sel_doc}}
+  </button>
 </template>
 
 <template name="span_tem">
@@ -82,8 +106,8 @@
 </template>
 
 <template name="form_tem">
-  <div class="{{get_tem_ty}} {{get_look}}">
-    <form class="form_div">
+  <div class="{{get_tem_ty}} {{get_look}} {{get_size}}">
+    <form class="form_div" role="form">
       <span class="submit_msg {{get_submit_visibility}}">{{get_submit_msg}}</span>
       {{>s_each_cyield}}
     </form>
